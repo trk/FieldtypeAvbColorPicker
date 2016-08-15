@@ -1,0 +1,444 @@
+<?php
+
+/**
+ * Class InputfieldAvbColorPicker
+ *
+ * @author			: İskender TOTOĞLU, @ukyo (community), @trk (Github)
+ * @website			: http://altivebir.com.tr
+ * @projectWebsite	: https://github.com/trk/FieldtypeAvbColorPicker
+ */
+class InputfieldAvbColorPicker extends Inputfield {
+    protected $selectorClass = 'AvbColorPicker';
+    protected $fontLibrary;
+
+    protected $attributes = array(
+        'color' => '',
+        'flat' => 'false',
+        'show-input' => 'true',
+        'allow-empty' => 'false',
+        'show-buttons' => 'true',
+        'clickout-fires-change' => 'true',
+        'show-initial' => 'false',
+        'show-palette' => 'true',
+        'show-palette-only' => 'false',
+        'hide-after-palette-select' => 'false',
+        'toggle-palette-only' => 'false',
+        'show-selection-palette' => 'true',
+        'local-storage-key' => '',
+        // 'append-to' => "body",
+        'max-selection-size' => 7,
+        'cancel-text' => "cancel",
+        'choose-text' => "choose",
+        'toggle-palette-more-text' => "more",
+        'toggle-palette-less-text' => "less",
+        'clear-text' => "clear color Selection",
+        'no-color-selected-text' => "no color selected",
+        'preferred-format' => 'none',
+        // 'class-name' => "", // Deprecated - use containerClassName and replacerClassName instead.
+        // 'container-class-name' => "",
+        // 'replacer-class-name' => "",
+        'show-alpha' => 'false',
+        'theme' => "sp-light",
+        'palette' =>
+        '[[
+            "rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)", "rgb(153, 153, 153)","rgb(183, 183, 183)",
+            "rgb(204, 204, 204)", "rgb(217, 217, 217)", "rgb(239, 239, 239)", "rgb(243, 243, 243)", "rgb(255, 255, 255)"
+        ],
+        [
+            "rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+            "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"
+        ],
+        [
+            "rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+            "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+            "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+            "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+            "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+            "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+            "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+            "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+            "rgb(133, 32, 12)", "rgb(153, 0, 0)", "rgb(180, 95, 6)", "rgb(191, 144, 0)", "rgb(56, 118, 29)",
+            "rgb(19, 79, 92)", "rgb(17, 85, 204)", "rgb(11, 83, 148)", "rgb(53, 28, 117)", "rgb(116, 27, 71)",
+            "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+            "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"
+        ]]',
+        'selection-palette' => '[]',
+        // 'disabled' => false,
+        // 'offset' => null
+    );
+
+    public static function getModuleInfo() {
+        return array(
+            'title' => 'InputfieldAvbColorPicker',
+            'summary' => __('Allow you to use spectrum color picker with ProcessWire'),
+            'version' => 1,
+            'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
+            'href' => 'https://github.com/trk/FieldtypeAvbColorPicker',
+            'icon' => 'flag',
+            'requires' => array(
+                'FieldtypeAvbColorPicker',
+            )
+        );
+    }
+
+    public function __construct() {
+        parent::__construct();
+        $this->libraryUrl = $this->config->urls->FieldtypeAvbColorPicker . 'Libraries/bgrins-spectrum-98454b5/';
+
+        $this->setAttribute('color', $this->attributes['color']);
+        $this->setAttribute('flat', $this->attributes['flat']);
+        $this->setAttribute('show-input', $this->attributes['show-input']);
+        $this->setAttribute('allow-empty', $this->attributes['allow-empty']);
+        $this->setAttribute('show-buttons', $this->attributes['show-buttons']);
+        $this->setAttribute('clickout-fires-change', $this->attributes['clickout-fires-change']);
+        $this->setAttribute('show-initial', $this->attributes['show-initial']);
+        $this->setAttribute('show-palette', $this->attributes['show-palette']);
+        $this->setAttribute('show-palette-only', $this->attributes['show-palette-only']);
+        $this->setAttribute('hide-after-palette-select', $this->attributes['hide-after-palette-select']);
+        $this->setAttribute('toggle-palette-only', $this->attributes['toggle-palette-only']);
+        $this->setAttribute('show-selection-palette', $this->attributes['show-selection-palette']);
+        $this->setAttribute('local-storage-key', $this->attributes['local-storage-key']);
+        // $this->setAttribute('append-to', $this->attributes['append-to']);
+        $this->setAttribute('max-selection-size', $this->attributes['max-selection-size']);
+        $this->setAttribute('cancel-text', $this->_('cancel'));
+        $this->setAttribute('choose-text', $this->_('choose'));
+        $this->setAttribute('toggle-palette-more-text', $this->_('more'));
+        $this->setAttribute('toggle-palette-less-text', $this->_('less'));
+        $this->setAttribute('clear-text', $this->_('clear color selection'));
+        $this->setAttribute('no-color-selected-text', $this->_('no color selected'));
+        $this->setAttribute('preferred-format', $this->attributes['preferred-format']);
+        // $this->setAttribute('class-name', $this->attributes['class-name']);
+        // $this->setAttribute('container-class-name', $this->attributes['container-class-name']);
+        // $this->setAttribute('replacer-class-name', $this->attributes['replacer-class-name']);
+        $this->setAttribute('show-alpha', $this->attributes['show-alpha']);
+        $this->setAttribute('theme', $this->attributes['theme']);
+        $this->setAttribute('palette', $this->attributes['palette']);
+        $this->setAttribute('selection-palette', $this->attributes['selection-palette']);
+        // $this->setAttribute('disabled', $this->attributes['disabled']);
+        // $this->setAttribute('offset', $this->attributes['offset']);
+    }
+
+    /**
+     * Init
+     */
+    public function init() {
+        parent::init();
+
+        $conf = $this->getModuleInfo();
+        $version = (int) $conf['version'];
+
+        // Load Main Css File
+        $this->config->styles->add($this->libraryUrl . "spectrum.css?v=" . $version);
+
+        /**
+         * Load Themes if Needed
+         *
+         * fip-grey : The default theme
+         * fip-darkgrey : A deeper shade of the grey theme
+         * fip-bootstrap : A nice icon picker theme
+         * fip-inverted : Inverted color scheme
+         */
+        if($this->theme == 'sp-light') $this->config->styles->add($this->libraryUrl . "themes/sp-dark.css?v=" . $version);
+
+        // Load Main Js File
+        $this->config->scripts->add($this->libraryUrl . "spectrum.js?v=" . $version);
+    }
+
+    /**
+     * Get Attributes
+     *
+     * @return array
+     */
+    public function getAttributes() {
+        $attrs = parent::getAttributes();
+        return $attrs;
+    }
+
+    public function setAttribute($key, $value) {
+        return parent::setAttribute($key, $value);
+    }
+
+    /**
+     * Render InputfieldAvbColorPicker
+     *
+     * @return string
+     */
+    public function ___render() {
+
+        // Set merged attributes
+        $attributes = array();
+        foreach ($this->getAttributes() as $key => $val) {
+            if($key == 'value' || $key == 'id' || $key == 'name') {
+                $attributes[$key] = $val;
+            } else {
+                $attributes['data-' . $key] = $val;
+                if($key == 'preferred-format' && $val == 'none' || $val == '') unset($attributes['data-preferred-format']);
+            }
+        }
+        if($this->value && $this->value != '' && array_key_exists('data-color', $attributes)) unset($attributes['data-color']);
+
+        // $this->setAttributes($this->getAttributes());
+        // echo "<pre>", print_r($attributes, true), "</pre>";
+
+        $output = "<input type='hidden' class='AvbColorPicker' " . $this->getAttributesString($attributes) . " />";
+
+        return $output;
+    }
+
+    public function ___getConfigInputfields() {
+        $inputfields = parent::___getConfigInputfields();
+        $labelDefault = $this->_('Default : ');
+        $defaultFalse = $labelDefault . 'false';
+        $defaultTrue = $labelDefault . 'true';
+        $defaultEmpty = $labelDefault . $this->_(' empty');
+
+        /**
+         * Color
+         */
+        $field = $this->modules->get('InputfieldText');
+        $field->setAttribute('name', 'color');
+        $field->label = $this->_('Color');
+        $field->description = $this->_('The initial color will be set with the color option. If you don\'t pass in a color, Spectrum will use the value attribute on the input.');
+        $field->notes = $defaultEmpty;
+        $field->attr('value', $this->attr('color'));
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->add($field);
+
+        /**
+         * Flat
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'flat');
+        $field->label = $this->_('Flat');
+        $field->description = '';
+        $field->notes = $defaultFalse;
+        $field->addOption('true', 'True', ($this->attr('flat') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('flat') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Input
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-input');
+        $field->label = $this->_('Show Input');
+        $field->description = $this->_('You can add an input to allow free form typing. The color parsing is very permissive in the allowed strings.');
+        $field->notes = $defaultTrue;
+        $field->addOption('true', 'True', ($this->attr('show-input') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-input') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Allow Empty
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'allow-empty');
+        $field->label = __('Allow Empty');
+        $field->addOption('true', 'True', ($this->attr('allow-empty') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('allow-empty') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Buttons
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-buttons');
+        $field->label = __('Show Buttons');
+        $field->description = $this->_("You can show or hide the buttons using the showButtons property. If there are no buttons, the behavior will be to fire the `change` event (and update the original input) when the picker is closed.");
+        $field->notes = $defaultTrue;
+        $field->addOption('true', 'True', ($this->attr('show-buttons') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-buttons') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Clickout Fires Change
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'clickout-fires-change');
+        $field->label = __('Clickout Fires Change');
+        $field->addOption('true', 'True', ($this->attr('clickout-fires-change') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('clickout-fires-change') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Initial
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-initial');
+        $field->label = __('Show Initial');
+        $field->description = $this->_("Spectrum can show the color that was initially set when opening. This provides an easy way to click back to what was set when opened.");
+        $field->notes = $defaultFalse;
+        $field->addOption('true', 'True', ($this->attr('show-initial') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-initial') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Palette
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-palette');
+        $field->label = __('Show Palette');
+        $field->description = $this->_('Spectrum can show a palette below the colorpicker to make it convenient for users to choose from frequently or recently used colors. When the colorpicker is closed, the current color will be added to the palette if it isn\'t there already.');
+        $field->notes = $defaultTrue;
+        $field->addOption('true', 'True', ($this->attr('show-palette') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-palette') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Palette Only
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-palette-only');
+        $field->label = $this->_('Show Palette Only');
+        $field->description = $this->_("If you'd like, spectrum can show the palettes you specify, and nothing else.");
+        $field->notes = $defaultFalse;
+        $field->addOption('true', 'True', ($this->attr('show-palette-only') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-palette-only') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Hide After Palette Select
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'hide-after-palette-select');
+        $field->label = __('Hide After Palette Select');
+        $field->description = $this->_("You can have the colorpicker automatically hide after a palette color is selected.");
+        $field->notes = $defaultFalse;
+        $field->addOption('true', 'True', ($this->attr('hide-after-palette-select') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('hide-after-palette-select') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Toggle Palette Only
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'toggle-palette-only');
+        $field->label = __('Toggle Palette Only');
+        $field->description = $this->_("Spectrum can show a button to toggle the colorpicker next to the palette. This way, the user can choose from a limited number of colors in the palette, but still be able to pick a color that's not in the palette.");
+        $field->notes = $defaultFalse;
+        $field->addOption('true', 'True', ($this->attr('toggle-palette-only') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('toggle-palette-only') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Selection Palette
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-selection-palette');
+        $field->label = __('Show Selection Palette');
+        $field->description = $this->_("Spectrum can keep track of what has been selected by the user with the showSelectionPalette option. If the localStorageKey option is defined, the selection will be saved in the browser's localStorage object");
+        $field->notes = $defaultTrue;
+        $field->addOption('true', 'True', ($this->attr('show-selection-palette') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-selection-palette') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Local Storage Key
+         */
+        $field = $this->modules->get('InputfieldText');
+        $field->setAttribute('name', 'local-storage-key');
+        $field->label = __('Local Storage Key');
+        $field->attr('value', $this->attr('local-storage-key'));
+        $field->description = $this->_('You can store your color selection to browser data by entering local storage key');
+        $field->notes = $defaultEmpty . ' / ' . $this->_('you can enter a key like : color.picker.my.website');
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Local Storage Key
+         */
+        $field = $this->modules->get('InputfieldInteger');
+        $field->setAttribute('name', 'max-selection-size');
+        $field->label = __('Max. Selection Size');
+        $field->attr('value', $this->attr('max-selection-size'));
+        $field->description = $this->_('This is how many elements are allowed in the selectionPallete at once. Elements will be removed from the palette in first in - first out order if this limit is reached.');
+        $field->notes = $labelDefault . '7';
+        $field->attr('type', 'number');
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Preferred Format
+         */
+        $field = $this->modules->get('InputfieldSelect');
+        $field->setAttribute('name', 'preferred-format');
+        $field->label = __('Preferred Format');
+        $field->description = $this->_("You can set the format that is displayed in the text box. This will also change the format that is displayed in the titles from the palette swatches.");
+        $field->notes = $defaultEmpty;
+        $field->addOption('none', $this->_('none'), ($this->attr('preferred-format') == 'none' || $this->attr('preferred-format') == '') ?  array('selected' => 'selected') : array());
+        $field->addOption('hex', 'hex', ($this->attr('preferred-format') == 'hex') ?  array('selected' => 'selected') : array());
+        $field->addOption('hex3', 'hex3', ($this->attr('preferred-format') == 'hex3') ?  array('selected' => 'selected') : array());
+        $field->addOption('hsl', 'hsl', ($this->attr('preferred-format') == 'hsl') ?  array('selected' => 'selected') : array());
+        $field->addOption('rgb', 'rgb', ($this->attr('preferred-format') == 'rgb') ?  array('selected' => 'selected') : array());
+        $field->addOption('name', 'name', ($this->attr('preferred-format') == 'rgb') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Show Alpha
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'show-alpha');
+        $field->label = __('Show Alpha');
+        $field->description = $this->_("You can allow alpha transparency selection.");
+        $field->notes = $defaultTrue;
+        $field->addOption('true', 'True', ($this->attr('show-alpha') == 'true') ?  array('selected' => 'selected') : array());
+        $field->addOption('false', 'False', ($this->attr('show-alpha') == 'false') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Theme
+         */
+        $field = $this->modules->get('InputfieldRadios');
+        $field->setAttribute('name', 'theme');
+        $field->label = __('Theme');
+        // $field->description = $this->_("You can allow alpha transparency selection.");
+        $field->notes = $defaultTrue;
+        $field->addOption('sp-light', 'Light', ($this->attr('theme') == 'sp-light') ?  array('selected' => 'selected') : array());
+        $field->addOption('sp-dark', 'Dark', ($this->attr('theme') == 'sp-dark') ?  array('selected' => 'selected') : array());
+        $field->optionColumns = 1;
+        $field->columnWidth = 25;
+        $inputfields->append($field);
+
+        /**
+         * Palette
+         */
+        $field = $this->modules->get("InputfieldTextarea");
+        $field->setAttribute('name', 'palette');
+        $field->label = $this->_('Palette');
+        $field->attr('value', $this->attr('palette'));
+        $field->description = $this->_('Comma seperated HEX values or "transp" (transparent) to add color swatches for each.');
+        $field->notes = $this->_('Format : [["rgb(0, 0, 0)", "rgb(67, 67, 67)"], ["rgb(152, 0, 0)", "rgb(255, 0, 0)"]]');
+        $inputfields->append($field);
+
+        return $inputfields;
+    }
+}

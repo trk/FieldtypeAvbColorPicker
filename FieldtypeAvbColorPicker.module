@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * Class FieldtypeAvbColorPicker
+ *
+ * @author			: İskender TOTOĞLU, @ukyo (community), @trk (Github)
+ * @website			: http://altivebir.com.tr
+ * @projectWebsite	: https://github.com/trk/FieldtypeAvbColorPicker
+ */
+class FieldtypeAvbColorPicker extends Fieldtype {
+
+    public static function getModuleInfo() {
+        return array(
+            'title' => 'FieldtypeAvbColorPicker',
+            'summary' => __('Allow you to use spectrum color picker with ProcessWire'),
+            'version' => 1,
+            'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
+            'icon' => 'flag-o',
+            'href' => 'https://github.com/trk/FieldtypeAvbColorPicker',
+            'installs' => array(
+                'InputfieldAvbColorPicker'
+            ),
+        );
+    }
+
+    public function init() {
+        parent::init();
+    }
+
+    /**
+     * Return the associated InputfieldAvbColorPicker
+     *
+     */
+    public function getInputfield(Page $page, Field $field) {
+        $inputField = $this->modules->get('InputfieldAvbColorPicker');
+        return $inputField;
+    }
+
+    /**
+     * Sanitize value for storage
+     */
+    public function sanitizeValue(Page $page, Field $field, $value) {
+        return $value;
+    }
+
+    /**
+     * Return the database schema in specified format
+     *
+     */
+    public function getDatabaseSchema(Field $field) {
+
+        // get the default schema
+        $schema = parent::getDatabaseSchema($field);
+
+        $schema['data'] = "VARCHAR(255) NOT NULL DEFAULT ''";
+
+        return $schema;
+    }
+}
